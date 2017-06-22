@@ -2,14 +2,14 @@
 
 namespace ApploudCodingStandard\Sniffs\Classes;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class BlacklistedClassesSniff implements PHP_CodeSniffer_Sniff
+class BlacklistedClassesSniff implements Sniff
 {
 
 	private const CODE_BLACKLISTED_CLASS_USE = 'BlacklistedClassUse';
@@ -48,11 +48,11 @@ class BlacklistedClassesSniff implements PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param PHP_CodeSniffer_File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $openTagPointer
 	 * @return void
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer): void // @codingStandardsIgnoreLine
+	public function process(File $phpcsFile, $openTagPointer): void // @codingStandardsIgnoreLine
 	{
 		foreach (UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer) as $useStatement) {
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($useStatement->getFullyQualifiedTypeName());
