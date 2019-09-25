@@ -54,13 +54,15 @@ class BlacklistedClassesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void // @codingStandardsIgnoreLine
 	{
-		foreach (UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer) as $useStatement) {
-			$canonicalName = NamespaceHelper::normalizeToCanonicalName($useStatement->getFullyQualifiedTypeName());
-			if (in_array($canonicalName, $this->getBlacklistedClasses(), true)) {
-				$phpcsFile->addError(sprintf(
-					'Class %s should not be used.',
-					$canonicalName
-				), $useStatement->getPointer(), self::CODE_BLACKLISTED_CLASS_USE);
+		foreach (UseStatementHelper::getFileUseStatements($phpcsFile) as $fileUseStatement) {
+			foreach ($fileUseStatement as $key => $useStatement) {
+				$canonicalName = NamespaceHelper::normalizeToCanonicalName($useStatement->getFullyQualifiedTypeName());
+				if (in_array($canonicalName, $this->getBlacklistedClasses(), true)) {
+					$phpcsFile->addError(sprintf(
+						'Class %s should not be used.',
+						$canonicalName
+					), $useStatement->getPointer(), self::CODE_BLACKLISTED_CLASS_USE);
+				}
 			}
 		}
 
